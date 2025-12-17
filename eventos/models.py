@@ -68,6 +68,28 @@ class Evento(models.Model):
         return f"{self.nombre} - {self.deporte.nombre}"
 
 
+class Equipo(models.Model):
+    """Modelo para representar un equipo deportivo"""
+    nombre = models.CharField(max_length=150, unique=True, verbose_name="Nombre")
+    deporte = models.ForeignKey(
+        Deporte,
+        on_delete=models.CASCADE,
+        related_name='equipos',
+        verbose_name="Deporte"
+    )
+    ciudad = models.CharField(max_length=100, verbose_name="Ciudad")
+    fecha_fundacion = models.DateField(blank=True, null=True, verbose_name="Fecha de Fundación")
+    fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
+
+    class Meta:
+        verbose_name = "Equipo"
+        verbose_name_plural = "Equipos"
+        ordering = ['nombre']
+
+    def __str__(self):
+        return self.nombre
+
+
 class EventoParticipante(models.Model):
     """Modelo intermedio para la relación Many-to-Many entre Evento y Participante"""
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE, verbose_name="Evento")
